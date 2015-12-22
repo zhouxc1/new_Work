@@ -43,6 +43,9 @@ public class SpeechWakeUtils implements RecognizeListener {
 		log_Toast = new Log_Toast(context);
 		recognizeUtils = new SpeechRecognizeUtils(context);
 		recognizeUtils.setOnRecognizeListener(this);
+
+		compoundUtils = new SpeechCompoundUtils(context);
+
 		initSpeech();
 	}
 
@@ -129,7 +132,6 @@ public class SpeechWakeUtils implements RecognizeListener {
 				resultString = "结果解析出错";
 				e.printStackTrace();
 			}
-			log_Toast.i(TAG, resultString);
 			stopWake();
 			recognizeUtils.startRecognize();
 		}
@@ -153,6 +155,7 @@ public class SpeechWakeUtils implements RecognizeListener {
 
 		}
 	};
+	private SpeechCompoundUtils compoundUtils;
 
 	/**
 	 * 识别结果回调
@@ -161,5 +164,6 @@ public class SpeechWakeUtils implements RecognizeListener {
 	public void setResult(String result) {
 		startWake();
 		log_Toast.i(TAG, result);
+		compoundUtils.startCompound(result);
 	}
 }
