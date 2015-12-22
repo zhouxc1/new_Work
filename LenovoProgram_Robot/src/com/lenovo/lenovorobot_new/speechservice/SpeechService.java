@@ -10,13 +10,16 @@ import com.lenovo.lenovorobot_new.BaseClass.BaseService;
  */
 public class SpeechService extends BaseService {
 
+	private SpeechWakeUtils speechWakeUtils;
+
 	@Override
 	public void initService() {
 
+		speechWakeUtils = new SpeechWakeUtils(getApplicationContext());
 	}
 
 	@Override
 	public void initServiceDate() {
-
+		speechWakeUtils.startWake();
 	}
 }
