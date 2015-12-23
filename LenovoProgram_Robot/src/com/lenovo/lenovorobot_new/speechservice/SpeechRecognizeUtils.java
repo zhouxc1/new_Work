@@ -50,6 +50,8 @@ public class SpeechRecognizeUtils {
 	private Log_Toast log_Toast;
 	int ret = 0; // 函数调用返回值
 	private RecognizeListener recognizeListener;
+	// 是否是关键词识别
+	private boolean isKeyWord = true;
 
 	public SpeechRecognizeUtils(Context context) {
 		log_Toast = new Log_Toast(context);
@@ -99,9 +101,10 @@ public class SpeechRecognizeUtils {
 		setParam();
 		boolean isShowDialog = mSharedPreferences.getBoolean("iat_show", true);
 		if (isShowDialog) {
-			// 显示听写对话框
+			// 显示听写对话框,加上这句话代码为了是能够,在service中把dialog给弹出来
 			mIatDialog.getWindow().setType(
 					WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
 			mIatDialog.setListener(mRecognizerDialogListener);
 			mIatDialog.show();
 			log_Toast.Toast("开始说话", 0);
@@ -128,7 +131,10 @@ public class SpeechRecognizeUtils {
 		 * 识别回调错误.
 		 */
 		public void onError(SpeechError error) {
-			log_Toast.Toast(error.getPlainDescription(true), 0);
+			mIatDialog.dismiss();
+			if (recognizeListener != null) {
+				recognizeListener.setError(error.getErrorCode());
+			}
 		}
 
 	};
@@ -145,9 +151,6 @@ public class SpeechRecognizeUtils {
 
 		@Override
 		public void onError(SpeechError error) {
-			// Tips：
-			// 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
-			// 如果使用本地功能（语记）需要提示用户开启语记的录音权限。
 			log_Toast.Toast(error.getPlainDescription(true), 0);
 		}
 
@@ -249,10 +252,19 @@ public class SpeechRecognizeUtils {
 		// 注：该参数暂时只对在线听写有效
 		mIat.setParameter(SpeechConstant.ASR_DWA,
 				mSharedPreferences.getString("iat_dwa_preference", "0"));
+
+		if (isKeyWord) {
+			// 设置本地识别使用语法id
+			mIat.setParameter(SpeechConstant.LOCAL_GRAMMAR, "call");
+			// 设置本地识别的门限值
+			mIat.setParameter(SpeechConstant.ASR_THRESHOLD, "30");
+		}
 	}
 
 	public interface RecognizeListener {
 		public void setResult(String result);
+
+		public void setError(int code);
 	}
 
 	public void setOnRecognizeListener(RecognizeListener recognizeListener) {

@@ -33,8 +33,7 @@ public class AcceptServerMessage implements FileLoadListener,
 	private boolean isCheckNetwork;
 	private ServerAddressBin fromJson;
 	private Log_Toast log_Toast;
-	// 连接服务器对象
-	private MoTransport mtServer;
+
 	// 用来控制连接线程的标记
 	private boolean isStartConnect = true;
 	private MoPacket mp;
@@ -68,11 +67,13 @@ public class AcceptServerMessage implements FileLoadListener,
 	};
 	private Gson gson;
 	private AcceptOpenServerPackageUtils acceptServerPackageUtils;
+	private MoTransport mtServer;
 
-	public AcceptServerMessage(Context context) {
+	public AcceptServerMessage(Context context, MoTransport mtServer) {
 		/*
 		 * 判断一下当前的网络状态是不是可以使用的,如果是可以使用的话在连接服务器,如果是不可以使用的话 就没有必要在去连接服务器了
 		 */
+		this.mtServer = mtServer;
 		isCheckNetwork = NetUtils.checkNetwork(context);
 		FileLoadUtils fileLoadUtilsInfo = FileLoadUtils.getFileLoadUtilsInfo();
 		// 加载服务器配置信息,写在文件当中,更换很方便
@@ -80,7 +81,7 @@ public class AcceptServerMessage implements FileLoadListener,
 		fileLoadUtilsInfo.setOnFileLoadListenerInfo(this);
 
 		log_Toast = new Log_Toast(context);
-		mtServer = new MoTransport();
+
 		gson = new Gson();
 
 		log_Toast.Toast("AcceptServerMessageUtils", 0);
@@ -88,9 +89,9 @@ public class AcceptServerMessage implements FileLoadListener,
 		acceptServerPackageUtils = new AcceptOpenServerPackageUtils(context);
 	}
 
-	public MoTransport getMoTransportInfo() {
-		return mtServer;
-	}
+	// public MoTransport getMoTransportInfo() {
+	// return mtServer;
+	// }
 
 	public void stopServer() {
 		if (mtServer != null) {

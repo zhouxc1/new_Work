@@ -12,17 +12,18 @@ import com.lenovo.mi.plato.comm.MoTransport;
 public class ServerService extends BaseService {
 
 	private AcceptServerMessage acceptServerMessageUtils;
-	// 获得传输器对象
-	private MoTransport moTransportInfo;
 	private SendServerMessage sendServerMessage;
+
+	// 连接服务器对象
+	private MoTransport mtServer;
 
 	@Override
 	public void initService() {
+		mtServer = new MoTransport();
 		acceptServerMessageUtils = new AcceptServerMessage(
-				getApplicationContext());
+				getApplicationContext(), mtServer);
 		// 获取传输器对象
-		moTransportInfo = acceptServerMessageUtils.getMoTransportInfo();
-		sendServerMessage = new SendServerMessage(moTransportInfo);
+		sendServerMessage = new SendServerMessage(mtServer);
 	}
 
 	@Override

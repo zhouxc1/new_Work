@@ -30,23 +30,35 @@ public class SpeechWakeUtils implements RecognizeListener {
 	// 语音唤醒对象
 	private VoiceWakeuper mIvw;
 	// 唤醒结果内容
-	private String resultString;
+	// private String resultString;
 	// 设置门限值 ： 门限值越低越容易被唤醒
-	private final static int MAX = 60;
+	// private final static int MAX = 60;
 	private final static int MIN = -20;
 	private int curThresh = MIN;
 	private Context context;
 	private SpeechRecognizeUtils recognizeUtils;
+	private SpeechCompoundUtils compoundUtils;
+	// 关键词上传的关键类
+	private KeyWord keyWord;
 
 	public SpeechWakeUtils(Context context) {
 		this.context = context;
 		log_Toast = new Log_Toast(context);
+
+		initKeyWord(context);
+		initRecognizeInfo(context);
+		initSpeech();
+	}
+
+	private void initKeyWord(Context context2) {
+		keyWord = new KeyWord(context2);
+	}
+
+	private void initRecognizeInfo(Context context) {
 		recognizeUtils = new SpeechRecognizeUtils(context);
 		recognizeUtils.setOnRecognizeListener(this);
 
 		compoundUtils = new SpeechCompoundUtils(context);
-
-		initSpeech();
 	}
 
 	private void initSpeech() {
@@ -72,7 +84,7 @@ public class SpeechWakeUtils implements RecognizeListener {
 		// 非空判断，防止因空指针使程序崩溃
 		mIvw = VoiceWakeuper.getWakeuper();
 		if (mIvw != null) {
-			resultString = "";
+			// resultString = "";
 			// textView.setText(resultString);
 			// 清空参数
 			mIvw.setParameter(SpeechConstant.PARAMS, null);
@@ -92,13 +104,6 @@ public class SpeechWakeUtils implements RecognizeListener {
 	}
 
 	public void stopWake() {
-		// Log.d(TAG, "onDestroy WakeDemo");
-		// mIvw = VoiceWakeuper.getWakeuper();
-		// if (mIvw != null) {
-		// mIvw.destroy();
-		// } else {
-		// log_Toast.i(TAG, "唤醒未初始化");
-		// }
 		mIvw = VoiceWakeuper.getWakeuper();
 		if (mIvw != null) {
 			mIvw.stopListening();
@@ -111,29 +116,31 @@ public class SpeechWakeUtils implements RecognizeListener {
 
 		@Override
 		public void onResult(WakeuperResult result) {
-			try {
-				String text = result.getResultString();
-				JSONObject object;
-				object = new JSONObject(text);
-				StringBuffer buffer = new StringBuffer();
-				buffer.append("【RAW】 " + text);
-				buffer.append("\n");
-				buffer.append("【操作类型】" + object.optString("sst"));
-				buffer.append("\n");
-				buffer.append("【唤醒词id】" + object.optString("id"));
-				buffer.append("\n");
-				buffer.append("【得分】" + object.optString("score"));
-				buffer.append("\n");
-				buffer.append("【前端点】" + object.optString("bos"));
-				buffer.append("\n");
-				buffer.append("【尾端点】" + object.optString("eos"));
-				resultString = buffer.toString();
-			} catch (JSONException e) {
-				resultString = "结果解析出错";
-				e.printStackTrace();
-			}
+			// try {
+			// String text = result.getResultString();
+			// JSONObject object;
+			// object = new JSONObject(text);
+			// StringBuffer buffer = new StringBuffer();
+			// buffer.append("【RAW】 " + text);
+			// buffer.append("\n");
+			// buffer.append("【操作类型】" + object.optString("sst"));
+			// buffer.append("\n");
+			// buffer.append("【唤醒词id】" + object.optString("id"));
+			// buffer.append("\n");
+			// buffer.append("【得分】" + object.optString("score"));
+			// buffer.append("\n");
+			// buffer.append("【前端点】" + object.optString("bos"));
+			// buffer.append("\n");
+			// buffer.append("【尾端点】" + object.optString("eos"));
+			// resultString = buffer.toString();
+			// } catch (JSONException e) {
+			// resultString = "结果解析出错";
+			// e.printStackTrace();
+			// }
 			stopWake();
+			// compoundUtils.startCompound("我是达尔文,很高兴和你聊天");
 			recognizeUtils.startRecognize();
+			keyWord.upLoadKeyWord();
 		}
 
 		@Override
@@ -155,7 +162,6 @@ public class SpeechWakeUtils implements RecognizeListener {
 
 		}
 	};
-	private SpeechCompoundUtils compoundUtils;
 
 	/**
 	 * 识别结果回调
@@ -165,5 +171,10 @@ public class SpeechWakeUtils implements RecognizeListener {
 		startWake();
 		log_Toast.i(TAG, result);
 		compoundUtils.startCompound(result);
+	}
+
+	@Override
+	public void setError(int code) {
+		startWake();
 	}
 }
