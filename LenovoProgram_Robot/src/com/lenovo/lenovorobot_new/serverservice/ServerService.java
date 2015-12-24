@@ -1,5 +1,8 @@
 package com.lenovo.lenovorobot_new.serverservice;
 
+import android.os.Handler;
+import android.os.Message;
+
 import com.lenovo.lenovorobot_new.BaseClass.BaseService;
 import com.lenovo.mi.plato.comm.MoTransport;
 
@@ -16,6 +19,8 @@ public class ServerService extends BaseService {
 
 	// 连接服务器对象
 	private MoTransport mtServer;
+	// 用来给外界使用的handler
+	public static Handler handler;
 
 	@Override
 	public void initService() {
@@ -24,6 +29,13 @@ public class ServerService extends BaseService {
 				getApplicationContext(), mtServer);
 		// 获取传输器对象
 		sendServerMessage = new SendServerMessage(mtServer);
+
+		handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				
+			}
+		};
 	}
 
 	@Override

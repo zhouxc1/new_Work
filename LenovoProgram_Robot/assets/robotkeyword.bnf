@@ -1,12 +1,70 @@
 #BNF+IAT 1.0 UTF-8;
 !grammar call;
-!slot <contact>;
-!slot <callPre>;
-!slot <callPhone>;
-!slot <callTo>;
+!slot <dance>;
+!slot <follow>;
+!slot <move>;
+!slot <open>;
+!slot <close>;
+!slot <projector>;
+!slot <light>;
+!slot <phone>;
+!slot <go>;
+!slot <position>;
+!slot <measurement>;
+!slot <task>;
+!slot <you>;
+!slot <can>;
+!slot <return>;
+!slot <play>;
+!slot <video>;
+!slot <stop>;
+!slot <startVideo>;
+!slot <nextVideo>;
+!slot <upVideo>;
+!slot <yes>;
+!slot <no>;
 !start <callStart>;
-<callStart>:[<callPre>][<callTo>]<contact><callPhone>|[<callPre>]<callPhone>[<callTo>]<contact>;
-<contact>:张海洋;
-<callPre>:我要|我想|我想要;
-<callPhone>:打电话;
-<callTo>:给;
+<callStart>:
+<dance>
+|<follow>
+|<move>
+|<open><projector>
+|<close><projector>
+|<open><light>
+|<close><light>
+|<open><phone>
+|<close><phone>
+|<go><position>
+|<measurement><task>
+|<you><can>
+|<return>
+|<play><video>
+|<stop>
+|<startVideo>
+|<nextVideo>
+|<upVideo>
+|<yes>
+|<no>;
+<dance>:跳个舞|结束跳舞;
+<follow>:跟我走|别跟了;
+<move>:前进|后退|左转|右转|紧急停止;
+<open>:打开;
+<close>:关闭;
+<projector>:投影;
+<light>:电灯;
+<phone>:视频通话;
+<go>:去;
+<position>:厨房|卧室|阳台|客厅;
+<measurement>:测量|检测|识别;
+<task>:身高|心率|人脸;
+<you>:你能;
+<can>:做什么|干什么;
+<return>:返回|功能返回;
+<play>:播放;
+<video>:视频;
+<stop>:紧急停止;
+<startVideo>:开始播放;
+<nextVideo>:下一条;
+<upVideo>:上一条;
+<yes>:是的;
+<no>:不是;

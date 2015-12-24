@@ -1,5 +1,8 @@
 package com.lenovo.lenovorobot_new.miervice;
 
+import android.os.Handler;
+import android.os.Message;
+
 import com.lenovo.lenovorobot_new.BaseClass.BaseService;
 
 /**
@@ -9,10 +12,16 @@ import com.lenovo.lenovorobot_new.BaseClass.BaseService;
  * 
  */
 public class MIService extends BaseService {
+	public static Handler handler;
 
 	@Override
 	public void initService() {
+		handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
 
+			}
+		};
 	}
 
 	@Override

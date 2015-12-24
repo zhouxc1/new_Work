@@ -1,10 +1,14 @@
 package com.lenovo.lenovorobot_new.BaseClass;
 
+import com.lenovo.lenovorobot_new.utils.Log_Toast;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
 public abstract class BaseService extends Service {
+
+	public Log_Toast log_Toast;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -15,7 +19,7 @@ public abstract class BaseService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		log_Toast = new Log_Toast(this);
 		initService();
 	}
 

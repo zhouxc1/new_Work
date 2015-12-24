@@ -27,10 +27,9 @@ public class KeyWord {
 
 	private static final String GRAMMAR_TYPE_BNF = "bnf";
 
-	private String mEngineType = SpeechConstant.TYPE_CLOUD;
+	private String mEngineType = SpeechConstant.TYPE_LOCAL;
 	// 语记安装助手类
 	private ApkInstaller mInstaller;
-	private Context context;
 	private Log_Toast log_Toast;
 
 	// 语法、词典临时变量
@@ -39,7 +38,6 @@ public class KeyWord {
 	private int ret = 0;
 
 	public KeyWord(Context context) {
-		this.context = context;
 		log_Toast = new Log_Toast(context);
 		speechKeyWordInit(context);
 	}
@@ -50,7 +48,6 @@ public class KeyWord {
 		mLocalGrammar = FucUtil.readFile(context, "robotkeyword.bnf", "utf-8");
 
 		mInstaller = new ApkInstaller(context);
-		mEngineType = SpeechConstant.TYPE_LOCAL;
 
 		/**
 		 * 选择本地合成 判断是否安装语记,未安装则跳转到提示安装页面
@@ -90,6 +87,7 @@ public class KeyWord {
 			}
 		}
 	};
+
 	/**
 	 * 本地构建语法监听器。
 	 */

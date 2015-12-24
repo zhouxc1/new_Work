@@ -51,7 +51,7 @@ public class SpeechRecognizeUtils {
 	int ret = 0; // 函数调用返回值
 	private RecognizeListener recognizeListener;
 	// 是否是关键词识别
-	private boolean isKeyWord = true;
+	private boolean isKeyWord;
 
 	public SpeechRecognizeUtils(Context context) {
 		log_Toast = new Log_Toast(context);
@@ -259,6 +259,10 @@ public class SpeechRecognizeUtils {
 			// 设置本地识别的门限值
 			mIat.setParameter(SpeechConstant.ASR_THRESHOLD, "30");
 		}
+	}
+
+	public void setIsKeyWord(boolean isKeyWord) {
+		this.isKeyWord = isKeyWord;
 	}
 
 	public interface RecognizeListener {
